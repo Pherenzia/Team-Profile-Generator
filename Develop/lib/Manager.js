@@ -2,6 +2,8 @@ const inquirer = require("inquirer");
 const fs = require("fs").promises;
 
 //const {name: , id, email, officeNumber} = manager;
+const engineers = [];
+const interns = [];
 
 class Manager {
     constructor(name, id, email, officeNumber, role) {
@@ -13,6 +15,23 @@ class Manager {
     }
 }
 
+class Engineer {
+    constructor(name, id, email, github,) {
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.github = github;
+    }
+}
+
+class Intern {
+    constructor(name, id, email, school) {
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.school = school
+    }
+}
 
 function managerInput() {
     return inquirer
@@ -81,47 +100,71 @@ function nextMember() {
       });
   }
 
-  function addCar() {
+  function addEngineer() {
     // TODO: prompt user for car properties and create car instance.
     return inquirer
       .prompt([
         {
-          name: "make",
+          name: "name",
           type: "input",
-          message: "Enter the car's make:",
+          message: "Enter the Engineer's name:",
         },
         {
-          name: "model",
+          name: "id",
           type: "input",
-          message: "Enter the car's model:",
+          message: "Enter the Engineer's id:",
         },
         {
-          name: "color",
+          name: "email",
           type: "input",
-          message: "Enter the car's color:",
+          message: "Enter the Engineer's email:",
         },
         {
-          name: "doors",
+          name: "github",
           type: "input",
-          message: "How many doors?",
+          message: "Enter the Engineer's github username:",
         },
       ])
       .then((answers) => {
-        cars.push(
-          new Car(answers.make, answers.model, answers.color, answers.doors)
+        engineers.push(
+          new Engineer(answers.name, answers.id, answers.email, answers.github)
+        );
+        return nextMember();
+      });
+  }
+function addIntern() {
+    // TODO: prompt user for car properties and create car instance.
+    return inquirer
+      .prompt([
+        {
+          name: "name",
+          type: "input",
+          message: "Enter the Intern's name:",
+        },
+        {
+          name: "id",
+          type: "input",
+          message: "Enter the Intern's id:",
+        },
+        {
+          name: "email",
+          type: "input",
+          message: "Enter the Intern's email:",
+        },
+        {
+          name: "school",
+          type: "input",
+          message: "What school did the intern attend?",
+        },
+      ])
+      .then((answers) => {
+        interns.push(
+          new Intern(answers.name, answers.id, answers.email, answers.school)
         );
         return getNextType();
       });
   }
 
-
-  
-function getOfficeNumber() {
-    this.officeNumber
-}
-function getRole() {
-    this.role
-}
 
 
 managerInput();
@@ -129,6 +172,6 @@ managerInput();
 //getRole();
 
 
-  module.exports = Manager, getOfficeNumber, getRole, managerInput
+  module.exports = Manager
   
   
