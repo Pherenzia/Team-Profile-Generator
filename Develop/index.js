@@ -4,8 +4,8 @@ const fs = require("fs").promises;
 //const {name: , id, email, officeNumber} = manager;
 const engineers = [];
 const interns = [];
-
-const staff = [interns, engineers,]
+let manager;
+const staff = [manager, interns, engineers,]
 
 class Manager {
     constructor(name, id, email, officeNumber, role) {
@@ -13,22 +13,22 @@ class Manager {
         this.id = id;
         this.email = email
         this.officeNumber = officeNumber;
-        Manager.prototype.getRole = function () {
-          return "Manager"
-        }
     }
-}
+    getRole = function () {
+      return "Manager"
+    };
+};
 class Engineer {
     constructor(name, id, email, github,) {
         this.name = name;
         this.id = id;
         this.email = email;
         this.github = github;
-        Engineer.prototype.getRole = function () {
-          return "Engineer"
-        }
     }
-}
+    getRole = function () {
+      return "Engineer"
+};
+};
 
 class Intern {
     constructor(name, id, email, school) {
@@ -36,11 +36,11 @@ class Intern {
         this.id = id;
         this.email = email;
         this.school = school
-        Intern.prototype.getRole = function () {
-          return "Intern"
-        }
     }
-}
+    getRole = function () {
+      return "Intern"
+    };
+};
 
 
 function managerInput() {
@@ -98,13 +98,13 @@ function nextMember() {
             return addIntern();
   
           default:
-            return renderListing();
+              console.log(staff)
+            return renderCard();
         }
       });
   }
 
   function addEngineer() {
-    // TODO: prompt user for car properties and create car instance.
     return inquirer
       .prompt([
         {
@@ -136,7 +136,6 @@ function nextMember() {
       });
   }
 function addIntern() {
-    // TODO: prompt user for car properties and create car instance.
     return inquirer
       .prompt([
         {
@@ -194,16 +193,27 @@ function renderEngineer(engineer) {
               </div>`;     
       }
 
-function renderCard(person) {
-  // if vehicle type is truck
-  switch (person.getRole()) {
-    case "Engineer":
-      return renderEngineer(person);
-    case "Intern":
-      return renderIntern(person);
+function renderManager(manager) {
+return `<div class="card " style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">${manager.name}</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                <li class="list-group-item">${manager.id}</li>
+                <li class="list-group-item">${manager.email}</li>
+                <li class="list-group-item">${manager.officeNumber}</li>
+                </ul>
+            </div>`;     
+    }
 
-    default:
-      return "";
+function renderCard(person) {
+  if (typeof person === Engineer) {
+      return renderEngineer(person)
+  } 
+  else if (typeof person === Intern) {
+      return renderIntern(person)
+  } else if (typeof person === Manager) {
+      return renderManager(person)
   }
 }
 
@@ -251,8 +261,7 @@ fs.writeFile("./index.html", html, (err) => {
 
 
 managerInput();
-//getOfficeNumber();
-//getRole();
+
 
 
 module.exports = Manager

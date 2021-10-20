@@ -16,7 +16,7 @@ test("Can set office number via constructor argument", () => {
 
 test('getRole() should return "Manager"', () => {
   const testValue = "Manager";
-  const e = new Manager("Foo", 1, "test@test.com", 100, testValue);
+  const e = new Manager("Foo", 1, "test@test.com", 100,);
   expect(e.getType()).toBe(testValue);
 });
 
