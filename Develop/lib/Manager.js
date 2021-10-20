@@ -5,22 +5,28 @@ const fs = require("fs").promises;
 const engineers = [];
 const interns = [];
 
+const staff = [interns, engineers,]
+
 class Manager {
     constructor(name, id, email, officeNumber, role) {
         this.name = name;
         this.id = id;
         this.email = email
         this.officeNumber = officeNumber;
-        this.role = role
+        Manager.prototype.getRole = function () {
+          return "Manager"
+        }
     }
 }
-
 class Engineer {
     constructor(name, id, email, github,) {
         this.name = name;
         this.id = id;
         this.email = email;
         this.github = github;
+        Engineer.prototype.getRole = function () {
+          return "Engineer"
+        }
     }
 }
 
@@ -30,8 +36,12 @@ class Intern {
         this.id = id;
         this.email = email;
         this.school = school
+        Intern.prototype.getRole = function () {
+          return "Intern"
+        }
     }
 }
+
 
 function managerInput() {
     return inquirer
@@ -56,12 +66,6 @@ function managerInput() {
             message: "Enter Manager's office number",
             name: 'officeNumber',
         },
-        {
-            type: 'list',
-            message: 'Confirm your role',
-            choices: ['Manager', 'Not the Manager'],
-            name: 'role'
-        },
       ])
       .then((answers) => {
           Manager = answers;
@@ -70,7 +74,6 @@ function managerInput() {
         // manager.email = answers.email
         // manager.officeNumber = answers.officeNumber
         console.log(Manager)
-        console.log(Manager.role)
 
         return nextMember();
     });
@@ -161,10 +164,90 @@ function addIntern() {
         interns.push(
           new Intern(answers.name, answers.id, answers.email, answers.school)
         );
-        return getNextType();
+        return nextMember();
       });
   }
 
+function renderIntern(intern) {
+  return `<div class="card " style="width: 18rem;">
+                  <div class="card-body">
+                  <h5 class="card-title">${intern.name}</h5>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  <li class="list-group-item">${intern.id}</li>
+                  <li class="list-group-item">${intern.email}</li>
+                  <li class="list-group-item">${intern.school}</li>
+                  </ul>
+              </div>`;     
+      }
+
+function renderEngineer(engineer) {
+  return `<div class="card " style="width: 18rem;">
+                  <div class="card-body">
+                  <h5 class="card-title">${engineer.name}</h5>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                  <li class="list-group-item">${engineer.id}</li>
+                  <li class="list-group-item">${engineer.email}</li>
+                  <li class="list-group-item">${engineer.github}</li>
+                  </ul>
+              </div>`;     
+      }
+
+function renderCard(person) {
+  // if vehicle type is truck
+  switch (person.getRole()) {
+    case "Engineer":
+      return renderEngineer(person);
+    case "Intern":
+      return renderIntern(person);
+
+    default:
+      return "";
+  }
+}
+
+function renderHtml(persons) {
+  console.log("person", persons);
+  const cards = persons.map((person) => renderCard(person));
+  console.log("cards", cards);
+
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+      <link rel="stylesheet" href="style.css">
+  
+      <title>Document</title>
+  </head>
+  <body>
+      <header id="custom_header">
+          Your Personalized Team
+      </header>
+  
+      <div class="container">
+          <div class="row">
+        ${cards.join("")}
+        </div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    </html>
+  `;
+}
+
+const html = renderHtml(staff);
+fs.writeFile("../index.html", html, (err) => {
+  if (err) {
+    console.log(err);
+    return;
+    0;
+  }
+  console.log("Success!!");
+});
 
 
 managerInput();
@@ -172,6 +255,6 @@ managerInput();
 //getRole();
 
 
-  module.exports = Manager
+module.exports = Manager
   
   
